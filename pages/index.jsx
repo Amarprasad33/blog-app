@@ -35,6 +35,8 @@ const QUERY = gql`
 `
 
 export default function Home() {
+
+  
   return (
     <>
       <Head>
