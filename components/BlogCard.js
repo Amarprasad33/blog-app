@@ -20,7 +20,7 @@ export default function BlogCard({
             <div className={styles.text}>
                 <h2>{title}</h2>
                 <div className={styles.details}>
-                    <div style={styles.author}>
+                    <div className={styles.author}>
                         <img src={author.avatar.url} alt=""/>
                         <h3>{author.name}</h3>
                     </div>
