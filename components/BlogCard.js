@@ -12,14 +12,23 @@ export default function BlogCard({
     
     return (
         <div className={styles.card}>
-            {title}
-            {author.name}
-            {coverPhoto.id}
             <Link href={'/posts/' + slug}> 
                 <div className={styles.imgContainer}>
-                    <img src={coverPhoto?.url} alt="" />
+                    <img  src={coverPhoto.url} alt="" />
                 </div>
             </Link>
+            <div className={styles.text}>
+                <h2>{title}</h2>
+                <div className={styles.details}>
+                    <div style={styles.author}>
+                        <img src={author.avatar.url} alt=""/>
+                        <h3>{author.name}</h3>
+                    </div>
+                    <div className={styles.date}>
+                        <h3>{datePublished}</h3>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 
