@@ -31,17 +31,61 @@ const QUERY = gql`
     }
 `;
 
-export async function getStaticProps() {
-  const { posts } = await graphcms.request(QUERY);
+const SLUGLIST = gql`
+    {
+        posts{
+            slug
+        }
+    }
+`;
 
+export async function getStaticPaths(){
+    const { posts } = await graphcms.request(SLUGLIST);
+
+    return{
+        paths: posts.map((post) => ({params: { slug: post.slug } })),
+        fallback: false,
+    };
+}
+
+export async function getStaticProps({ params }) {
+  const slug = params.slug;
+  const data = await graphcms.request(QUERY, {slug});
+  const post = data.post;
   return {
     props: {
-      posts,
+      post,
     },
     revalidate: 10,
   };
 }
 
-export default function Article(){
-    return <div>Article</div>;
+
+export default function BlogPost({post}){
+    return (
+        <main className={styles.blog}>
+          <img
+            className={styles.cover}
+            src={post.coverPhoto.url}
+            alt={post.title}
+          />
+          <div className={styles.title}>
+            <div className={styles.authdetails}>
+              <img src={post.author.avatar.url} alt={post.author.name} />
+              <div className={styles.authtext}>
+                <h6>By {post.author.name} </h6>
+                <h6 className={styles.date}>
+                  {post.datePublished}
+                </h6>
+              </div>
+            </div>
+            <h2>{post.title}</h2>
+          </div>
+    
+          <div
+            className={styles.content}
+            dangerouslySetInnerHTML={{ __html: post.content.html }}
+          ></div>
+        </main>
+      );
 }
